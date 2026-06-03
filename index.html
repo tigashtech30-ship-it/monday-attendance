@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monday Morning Meeting — Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#0a0a0f;color:#f0f0f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.container{width:100%;max-width:420px}
+.card{background:#13131a;border:1px solid #2a2a3a;border-radius:20px;padding:2rem;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%);pointer-events:none}
+.header{text-align:center;margin-bottom:2rem}
+.logo{width:52px;height:52px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:22px}
+.title{font-size:20px;font-weight:600;color:#fff;letter-spacing:-0.3px}
+.subtitle{font-size:13px;color:#666;margin-top:4px;font-family:'DM Mono',monospace}
+.meeting-badge{display:inline-flex;align-items:center;gap:6px;background:#1e1e2e;border:1px solid #2a2a3a;border-radius:999px;padding:5px 14px;font-size:12px;color:#a0a0c0;margin-top:12px}
+.dot{width:7px;height:7px;border-radius:50%;background:#6366f1;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.form-group{margin-bottom:1.2rem}
+label{display:block;font-size:12px;font-weight:500;color:#888;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase}
+input,select{width:100%;background:#1a1a24;border:1px solid #2a2a3a;border-radius:10px;padding:11px 14px;font-size:14px;color:#f0f0f0;font-family:'DM Sans',sans-serif;transition:border-color 0.2s,box-shadow 0.2s;outline:none;-webkit-appearance:none}
+input:focus,select:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.12)}
+input::placeholder{color:#444}
+select option{background:#1a1a24}
+.location-box{background:#1a1a24;border:1px solid #2a2a3a;border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:10px;transition:border-color 0.2s}
+.location-box.active{border-color:#10b981}
+.location-box.error{border-color:#ef4444}
+.loc-text{font-size:13px;color:#666;flex:1}
+.loc-text.found{color:#10b981}
+.loc-text.err{color:#ef4444}
+.loc-btn{font-size:12px;background:#6366f1;color:#fff;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.coords{font-family:'DM Mono',monospace;font-size:11px;color:#555;margin-top:4px}
+.divider{height:1px;background:#1e1e2e;margin:1.5rem 0}
+.submit-btn{width:100%;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.2s,transform 0.1s;letter-spacing:-0.2px}
+.submit-btn:hover{opacity:0.92}
+.submit-btn:active{transform:scale(0.98)}
+.submit-btn:disabled{opacity:0.4;cursor:not-allowed}
+.success{display:none;text-align:center;padding:1rem 0}
+.success-icon{font-size:52px;margin-bottom:1rem}
+.success-title{font-size:18px;font-weight:600;color:#10b981}
+.success-msg{font-size:13px;color:#666;margin-top:6px;line-height:1.6}
+.success-data{background:#1a1a24;border-radius:10px;padding:12px 14px;margin-top:1rem;text-align:left}
+.data-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid #222}
+.data-row:last-child{border-bottom:none}
+.data-key{color:#666;font-family:'DM Mono',monospace}
+.data-val{color:#a0a0c0;text-align:right;max-width:60%}
+.map-link{color:#6366f1;font-size:12px;text-decoration:none;display:inline-block;margin-top:8px}
+.time-display{font-family:'DM Mono',monospace;font-size:11px;color:#444;text-align:center;margin-top:1rem}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <div class="header">
+      <div class="logo">📋</div>
+      <div class="title">காலை கூட்டம்</div>
+      <div class="subtitle">Monday Morning Meeting</div>
+      <div class="meeting-badge">
+        <div class="dot"></div>
+        <span id="live-time">--:--</span>
+      </div>
+    </div>
+
+    <div id="form-section">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="name" placeholder="உங்கள் பெயர் உள்ளிடுக" autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label>NIC No</label>
+        <input type="text" id="nicno" placeholder="200012345678" autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label>கிளை / Branch</label>
+	<input type="text" id="branch" placeholder="கிளை" autocomplete="" />
+              </div>
+
+      <div class="divider"></div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <div class="location-box" id="loc-box">
+          <span style="font-size:18px">📍</span>
+          <div style="flex:1">
+            <div class="loc-text" id="loc-text">GPS இன்னும் எடுக்கவில்லை</div>
+            <div class="coords" id="coords"></div>
+          </div>
+          <button class="loc-btn" onclick="getLocation()">📡 எடு</button>
+        </div>
+      </div>
+
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">✓ Attendance பதிவு செய்</button>
+    </div>
+
+    <div class="success" id="success-section">
+      <div class="success-icon">✅</div>
+      <div class="success-title">வெற்றிகரமாக பதிவாகியது!</div>
+      <div class="success-msg">உங்கள் Attendance Google Sheets-ல்<br>தானாக பதிவு செய்யப்பட்டது.</div>
+      <div class="success-data" id="success-data"></div>
+    </div>
+
+    <div class="time-display" id="date-display"></div>
+  </div>
+</div>
+
+<script>
+// உங்கள் Google Apps Script URL இங்கே ஒட்டவும்
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGCBMv1leKpMA77QZRVM-j7TtPH_mdURmAUhjGHlBQTWVM5azbUECNGy43eZEpWQWF/exec";
+
+let lat = null, lng = null;
+
+function updateTime() {
+  const now = new Date();
+  document.getElementById('live-time').textContent =
+    now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+  document.getElementById('date-display').textContent =
+    now.toLocaleDateString('ta-IN', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+updateTime();
+setInterval(updateTime, 1000);
+
+function getLocation() {
+  const box = document.getElementById('loc-box');
+  const txt = document.getElementById('loc-text');
+  const coords = document.getElementById('coords');
+  txt.textContent = 'GPS தேடுகிறது...';
+  txt.className = 'loc-text';
+  coords.textContent = '';
+
+  if (!navigator.geolocation) {
+    txt.textContent = 'இந்த Browser GPS ஆதரிக்கவில்லை';
+    txt.className = 'loc-text err';
+    box.className = 'location-box error';
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      lat = pos.coords.latitude.toFixed(6);
+      lng = pos.coords.longitude.toFixed(6);
+      txt.textContent = 'இருப்பிடம் கண்டறியப்பட்டது ✓';
+      txt.className = 'loc-text found';
+      coords.textContent = lat + ', ' + lng;
+      box.className = 'location-box active';
+    },
+    function(err) {
+      const msgs = {1:'Location அனுமதி மறுக்கப்பட்டது', 2:'GPS Signal கிடைக்கவில்லை', 3:'நேரம் முடிந்தது'};
+      txt.textContent = msgs[err.code] || 'பிழை ஏற்பட்டது';
+      txt.className = 'loc-text err';
+      box.className = 'location-box error';
+      lat = null; lng = null;
+    },
+    {enableHighAccuracy: true, timeout: 12000, maximumAge: 0}
+  );
+}
+
+function submitForm() {
+  const name   = document.getElementById('name').value.trim();
+  const nicno  = document.getElementById('nicno').value.trim();
+  const branch = document.getElementById('branch').value;
+
+  if (!name || !nicno || !branch) {
+    alert('அனைத்து தகவல்களையும் உள்ளிடவும்!');
+    return;
+  }
+  if (!lat || !lng) {
+    alert('முதலில் Location எடுக்கவும்!');
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'பதிவு செய்கிறது...';
+
+  const now    = new Date();
+  const dt     = now.toLocaleDateString('en-GB');
+  const tm     = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
+  const mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
+
+  const payload = {
+    name:      name,
+    nicno:     nicno,
+    branch:    branch,
+    date:      dt,
+    time:      tm,
+    latitude:  lat,
+    longitude: lng,
+    mapLink:   mapLink
+  };
+
+  if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwGCBMv1leKpMA77QZRVM-j7TtPH_mdURmAUhjGHlBQTWVM5azbUECNGy43eZEpWQWF/exec") {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    }).catch(function(){});
+  }
+
+  setTimeout(function() {
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-section').style.display = 'block';
+    document.getElementById('success-data').innerHTML =
+      '<div class="data-row"><span class="data-key">பெயர்</span><span class="data-val">' + name + '</span></div>' +
+      '<div class="data-row"><span class="data-key">NIC No</span><span class="data-val">' + nicno + '</span></div>' +
+      '<div class="data-row"><span class="data-key">Branch</span><span class="data-val">' + branch + '</span></div>' +
+      '<div class="data-row"><span class="data-key">தேதி</span><span class="data-val">' + dt + '</span></div>' +
+      '<div class="data-row"><span class="data-key">நேரம்</span><span class="data-val">' + tm + '</span></div>' +
+      '<div class="data-row"><span class="data-key">GPS</span><span class="data-val" style="color:#10b981">' + lat + ', ' + lng + '</span></div>' +
+      '<a class="map-link" href="' + mapLink + '" target="_blank">🗺 Google Maps-ல் பார்</a>';
+  }, 1000);
+}
+</script>
+</body>
+</html>
