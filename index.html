@@ -2,215 +2,448 @@
 <html lang="ta">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monday Morning Meeting — Attendance</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Monday Knowledge Sharing — Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'DM Sans',sans-serif;background:#0a0a0f;color:#f0f0f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
-.container{width:100%;max-width:420px}
-.card{background:#13131a;border:1px solid #2a2a3a;border-radius:20px;padding:2rem;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%);pointer-events:none}
-.header{text-align:center;margin-bottom:2rem}
-.logo{width:52px;height:52px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:22px}
-.title{font-size:20px;font-weight:600;color:#fff;letter-spacing:-0.3px}
-.subtitle{font-size:13px;color:#666;margin-top:4px;font-family:'DM Mono',monospace}
-.meeting-badge{display:inline-flex;align-items:center;gap:6px;background:#1e1e2e;border:1px solid #2a2a3a;border-radius:999px;padding:5px 14px;font-size:12px;color:#a0a0c0;margin-top:12px}
-.dot{width:7px;height:7px;border-radius:50%;background:#6366f1;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.form-group{margin-bottom:1.2rem}
-label{display:block;font-size:12px;font-weight:500;color:#888;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase}
-input,select{width:100%;background:#1a1a24;border:1px solid #2a2a3a;border-radius:10px;padding:11px 14px;font-size:14px;color:#f0f0f0;font-family:'DM Sans',sans-serif;transition:border-color 0.2s,box-shadow 0.2s;outline:none;-webkit-appearance:none}
-input:focus,select:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.12)}
-input::placeholder{color:#444}
-select option{background:#1a1a24}
-.location-box{background:#1a1a24;border:1px solid #2a2a3a;border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:10px;transition:border-color 0.2s}
-.location-box.active{border-color:#10b981}
-.location-box.error{border-color:#ef4444}
-.loc-text{font-size:13px;color:#666;flex:1}
-.loc-text.found{color:#10b981}
-.loc-text.err{color:#ef4444}
-.loc-btn{font-size:12px;background:#6366f1;color:#fff;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
-.coords{font-family:'DM Mono',monospace;font-size:11px;color:#555;margin-top:4px}
-.divider{height:1px;background:#1e1e2e;margin:1.5rem 0}
-.submit-btn{width:100%;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.2s,transform 0.1s;letter-spacing:-0.2px}
-.submit-btn:hover{opacity:0.92}
-.submit-btn:active{transform:scale(0.98)}
-.submit-btn:disabled{opacity:0.4;cursor:not-allowed}
-.success{display:none;text-align:center;padding:1rem 0}
-.success-icon{font-size:52px;margin-bottom:1rem}
-.success-title{font-size:18px;font-weight:600;color:#10b981}
-.success-msg{font-size:13px;color:#666;margin-top:6px;line-height:1.6}
-.success-data{background:#1a1a24;border-radius:10px;padding:12px 14px;margin-top:1rem;text-align:left}
-.data-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid #222}
-.data-row:last-child{border-bottom:none}
-.data-key{color:#666;font-family:'DM Mono',monospace}
-.data-val{color:#a0a0c0;text-align:right;max-width:60%}
-.map-link{color:#6366f1;font-size:12px;text-decoration:none;display:inline-block;margin-top:8px}
-.time-display{font-family:'DM Mono',monospace;font-size:11px;color:#444;text-align:center;margin-top:1rem}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
+  background: #FFFFFF;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ── Header ── */
+.header {
+  background: #1E3A8A;
+  border-radius: 16px 16px 0 0;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-icon {
+  width: 52px; height: 52px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.header-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+.header-sub {
+  font-size: 13px;
+  color: #BFDBFE;
+  margin-top: 3px;
+}
+.time-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Card Body ── */
+.card {
+  background: #FFFFFF;
+  border: 2px solid #1E3A8A;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  padding: 24px;
+}
+
+/* ── Form Groups ── */
+.form-group { margin-bottom: 20px; }
+
+label {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+
+.label-ta {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-left: 6px;
+}
+
+input, select {
+  width: 100%;
+  background: #F8FAFC;
+  border: 2px solid #CBD5E1;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0F172A;
+  font-family: inherit;
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus {
+  border-color: #1E3A8A;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(30,58,138,0.10);
+}
+input::placeholder { color: #94A3B8; font-weight: 400; }
+
+/* ── Divider ── */
+.divider {
+  height: 2px;
+  background: #E2E8F0;
+  margin: 22px 0;
+  border-radius: 2px;
+}
+
+/* ── Location Box ── */
+.loc-outer {
+  border: 2px solid #CBD5E1;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.loc-outer.ok  { border-color: #16A34A; }
+.loc-outer.err { border-color: #DC2626; }
+.loc-outer.loading { border-color: #1E3A8A; }
+
+.loc-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  background: #F8FAFC;
+}
+.loc-outer.ok   .loc-inner { background: #F0FDF4; }
+.loc-outer.err  .loc-inner { background: #FEF2F2; }
+.loc-outer.loading .loc-inner { background: #EFF6FF; }
+
+.loc-pin { font-size: 22px; flex-shrink: 0; }
+
+.loc-text {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.3;
+}
+.loc-outer.ok   .loc-text { color: #15803D; }
+.loc-outer.err  .loc-text { color: #B91C1C; }
+.loc-outer.loading .loc-text { color: #1E3A8A; }
+
+.loc-coords {
+  font-family: monospace;
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 3px;
+  font-weight: 400;
+}
+
+.loc-btn {
+  background: #1E3A8A;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.loc-btn:hover  { background: #1E40AF; }
+.loc-btn:disabled { background: #94A3B8; cursor: not-allowed; }
+
+.loc-hint {
+  background: #FEF3C7;
+  border-top: 1px solid #FDE68A;
+  padding: 9px 14px;
+  font-size: 13px;
+  color: #92400E;
+  font-weight: 500;
+  display: none;
+  line-height: 1.5;
+}
+.loc-hint.show { display: block; }
+
+/* ── Submit Button ── */
+.submit-btn {
+  width: 100%;
+  background: #1E3A8A;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 4px;
+}
+.submit-btn:hover  { background: #1E40AF; }
+.submit-btn:active { transform: scale(0.98); }
+.submit-btn:disabled { background: #94A3B8; cursor: not-allowed; }
+
+/* ── Success ── */
+.success {
+  display: none;
+  text-align: center;
+  padding: 8px 0 16px;
+}
+.success-icon { font-size: 64px; margin-bottom: 10px; }
+.success-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #15803D;
+  margin-bottom: 6px;
+}
+.success-sub {
+  font-size: 15px;
+  color: #475569;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.success-table {
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: left;
+}
+.s-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 16px;
+  border-bottom: 1px solid #E2E8F0;
+  font-size: 15px;
+}
+.s-row:last-child { border-bottom: none; }
+.s-key { color: #64748B; font-weight: 600; }
+.s-val { color: #0F172A; font-weight: 700; text-align: right; max-width: 60%; }
+.map-link {
+  display: inline-block;
+  margin-top: 14px;
+  background: #1E3A8A;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ── Date bar ── */
+.date-bar {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748B;
+  margin-top: 14px;
+  letter-spacing: 0.02em;
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="card">
-    <div class="header">
-      <div class="logo">📋</div>
-      <div class="title">அறிவுப்பகிர்வு நிகழ்வு</div>
-      <div class="subtitle">Knowledge Sharing Event</div>
-      <div class="meeting-badge">
-        <div class="dot"></div>
-        <span id="live-time">--:--</span>
-      </div>
-    </div>
 
+  <!-- Header -->
+  <div class="header">
+    <div class="header-icon">📋</div>
+    <div>
+      <div class="header-title">காலை கூட்டம்</div>
+      <div class="header-sub">Monday Knowledge Sharing </div>
+    </div>
+    <div class="time-badge" id="live-time">--:--</div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
     <div id="form-section">
+
       <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="name" placeholder="உங்கள் பெயர் உள்ளிடுக" autocomplete="name" />
+        <label>பெயர் <span class="label-ta">/ Name</span></label>
+        <input type="text" id="name" placeholder="உங்கள் பெயர் உள்ளிடுக" autocomplete="name">
       </div>
+
       <div class="form-group">
-        <label>NIC No</label>
-        <input type="text" id="nicno" placeholder="200012345678" autocomplete="off" />
+        <label>NIC எண் <span class="label-ta">/ NIC No</span></label>
+        <input type="text" id="nicno" placeholder="200012345678" autocomplete="off" inputmode="numeric">
       </div>
+
       <div class="form-group">
-        <label>கிளை / Branch</label>
-	<input type="text" id="branch" placeholder="கிளை" autocomplete="" />
-              </div>
+        <label>கிளை <span class="label-ta">/ Branch</span></label>
+        <select id="branch">
+          <option value="">-- தேர்வு செய்க / Select Branch --</option>
+          <option>Commissioner Branch</option>
+          <option>Administrative Branch</option>
+          <option>Finance Branch</option>
+          <option>Engineering Branch</option>
+          <option>Health Branch</option>
+          <option>Revenue Branch</option>
+          <option>Planning Branch</option>
+        </select>
+      </div>
 
       <div class="divider"></div>
 
       <div class="form-group">
-        <label>Location</label>
-        <div class="location-box" id="loc-box">
-          <span style="font-size:18px">📍</span>
-          <div style="flex:1">
-            <div class="loc-text" id="loc-text">GPS இன்னும் எடுக்கவில்லை</div>
-            <div class="coords" id="coords"></div>
+        <label>இருப்பிடம் <span class="label-ta">/ Location</span></label>
+        <div class="loc-outer" id="loc-outer">
+          <div class="loc-inner">
+            <span class="loc-pin">📍</span>
+            <div style="flex:1">
+              <div class="loc-text" id="loc-text">GPS இன்னும் எடுக்கவில்லை</div>
+              <div class="loc-coords" id="loc-coords"></div>
+            </div>
+            <button class="loc-btn" id="loc-btn" onclick="getLocation()">📡 எடு</button>
           </div>
-          <button class="loc-btn" onclick="getLocation()">📡 எடு</button>
+          <div class="loc-hint" id="loc-hint"></div>
         </div>
       </div>
 
-      <button class="submit-btn" id="submit-btn" onclick="submitForm()">✓ Attendance பதிவு செய்</button>
-    </div>
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+        ✓ Attendance பதிவு செய்
+      </button>
 
+    </div><!-- /form-section -->
+
+    <!-- Success -->
     <div class="success" id="success-section">
       <div class="success-icon">✅</div>
       <div class="success-title">வெற்றிகரமாக பதிவாகியது!</div>
-      <div class="success-msg">உங்கள் Attendance Google Sheets-ல்<br>தானாக பதிவு செய்யப்பட்டது.</div>
-      <div class="success-data" id="success-data"></div>
+      <div class="success-sub">உங்கள் Attendance Google Sheets-ல்<br>தானாக பதிவு செய்யப்பட்டது.</div>
+      <div class="success-table" id="success-data"></div>
+      <a id="map-link" class="map-link" href="#" target="_blank">🗺 Google Maps-ல் பார்</a>
     </div>
 
-    <div class="time-display" id="date-display"></div>
-  </div>
-</div>
+  </div><!-- /card -->
+
+  <div class="date-bar" id="date-bar"></div>
+
+</div><!-- /container -->
 
 <script>
-// உங்கள் Google Apps Script URL இங்கே ஒட்டவும்
+// ── உங்கள் Google Apps Script URL இங்கே ஒட்டவும் ──
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoEQL4afV0zE21EQZS9yjUQnk3og7qVYJ3NT00rS7p4ewTNiB7hQ2T3u_ZNJ1Qbgv3/exec";
 
 let lat = null, lng = null;
 
-function updateTime() {
-  const now = new Date();
-  document.getElementById('live-time').textContent =
-    now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
-  document.getElementById('date-display').textContent =
-    now.toLocaleDateString('ta-IN', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+// Clock
+function tick() {
+  const n = new Date();
+  const t = n.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+  document.getElementById('live-time').textContent = t;
+  document.getElementById('date-bar').textContent =
+    n.toLocaleDateString('ta-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 }
-updateTime();
-setInterval(updateTime, 1000);
+tick(); setInterval(tick, 1000);
+
+// Location
+function setLoc(state, msg, coords, hint) {
+  const o = document.getElementById('loc-outer');
+  const t = document.getElementById('loc-text');
+  const c = document.getElementById('loc-coords');
+  const h = document.getElementById('loc-hint');
+  const b = document.getElementById('loc-btn');
+  o.className = 'loc-outer' + (state ? ' ' + state : '');
+  t.textContent = msg;
+  c.textContent = coords || '';
+  h.textContent = hint || '';
+  h.className = 'loc-hint' + (hint ? ' show' : '');
+  b.disabled = state === 'loading';
+  b.textContent = state === 'loading' ? '⏳ தேடுகிறது...' : '📡 எடு';
+}
 
 function getLocation() {
-  const box = document.getElementById('loc-box');
-  const txt = document.getElementById('loc-text');
-  const coords = document.getElementById('coords');
-  txt.textContent = 'GPS தேடுகிறது...';
-  txt.className = 'loc-text';
-  coords.textContent = '';
-
   if (!navigator.geolocation) {
-    txt.textContent = 'இந்த Browser GPS ஆதரிக்கவில்லை';
-    txt.className = 'loc-text err';
-    box.className = 'location-box error';
+    setLoc('err', 'GPS ஆதரிக்கப்படவில்லை', '', 'Chrome Browser பயன்படுத்துங்கள்.');
     return;
   }
-
+  setLoc('loading', 'GPS தேடுகிறது...', '', '');
   navigator.geolocation.getCurrentPosition(
-    function(pos) {
-      lat = pos.coords.latitude.toFixed(6);
-      lng = pos.coords.longitude.toFixed(6);
-      txt.textContent = 'இருப்பிடம் கண்டறியப்பட்டது ✓';
-      txt.className = 'loc-text found';
-      coords.textContent = lat + ', ' + lng;
-      box.className = 'location-box active';
+    function(p) {
+      lat = p.coords.latitude.toFixed(6);
+      lng = p.coords.longitude.toFixed(6);
+      setLoc('ok', 'இருப்பிடம் கண்டறியப்பட்டது ✓', lat + ',  ' + lng, '');
     },
-    function(err) {
-      const msgs = {1:'Location அனுமதி மறுக்கப்பட்டது', 2:'GPS Signal கிடைக்கவில்லை', 3:'நேரம் முடிந்தது'};
-      txt.textContent = msgs[err.code] || 'பிழை ஏற்பட்டது';
-      txt.className = 'loc-text err';
-      box.className = 'location-box error';
+    function(e) {
+      const m = { 1: 'Location அனுமதி மறுக்கப்பட்டது', 2: 'GPS Signal கிடைக்கவில்லை', 3: 'நேரம் முடிந்தது — மீண்டும் முயற்சி செய்' };
+      setLoc('err', m[e.code] || 'பிழை ஏற்பட்டது', '',
+        'Settings → Privacy → Location → Browser → Allow செய்யவும்.');
       lat = null; lng = null;
     },
-    {enableHighAccuracy: true, timeout: 12000, maximumAge: 0}
+    { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
   );
 }
 
+// Submit
 function submitForm() {
   const name   = document.getElementById('name').value.trim();
   const nicno  = document.getElementById('nicno').value.trim();
   const branch = document.getElementById('branch').value;
-
-  if (!name || !nicno || !branch) {
-    alert('அனைத்து தகவல்களையும் உள்ளிடவும்!');
-    return;
-  }
-  if (!lat || !lng) {
-    alert('முதலில் Location எடுக்கவும்!');
-    return;
-  }
+  if (!name || !nicno || !branch) { alert('அனைத்து தகவல்களையும் உள்ளிடவும்!'); return; }
+  if (!lat || !lng) { alert('முதலில் Location எடுக்கவும்!'); return; }
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
-  btn.textContent = 'பதிவு செய்கிறது...';
+  btn.textContent = '⏳ பதிவு செய்கிறது...';
 
-  const now    = new Date();
-  const dt     = now.toLocaleDateString('en-GB');
-  const tm     = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:true});
-  const mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
+  const now = new Date();
+  const dt  = now.toLocaleDateString('en-GB');
+  const tm  = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+  const ml  = 'https://maps.google.com/?q=' + lat + ',' + lng;
 
-  const payload = {
-    name:      name,
-    nicno:     nicno,
-    branch:    branch,
-    date:      dt,
-    time:      tm,
-    latitude:  lat,
-    longitude: lng,
-    mapLink:   mapLink
-  };
-
-  if (SCRIPT_URL !== "") {
+  if (SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
     fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload)
-    }).catch(function(){});
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, nicno, branch, date: dt, time: tm, latitude: lat, longitude: lng, mapLink: ml })
+    }).catch(function() {});
   }
 
   setTimeout(function() {
     document.getElementById('form-section').style.display = 'none';
     document.getElementById('success-section').style.display = 'block';
+    document.getElementById('map-link').href = ml;
     document.getElementById('success-data').innerHTML =
-      '<div class="data-row"><span class="data-key">பெயர்</span><span class="data-val">' + name + '</span></div>' +
-      '<div class="data-row"><span class="data-key">NIC No</span><span class="data-val">' + nicno + '</span></div>' +
-      '<div class="data-row"><span class="data-key">Branch</span><span class="data-val">' + branch + '</span></div>' +
-      '<div class="data-row"><span class="data-key">தேதி</span><span class="data-val">' + dt + '</span></div>' +
-      '<div class="data-row"><span class="data-key">நேரம்</span><span class="data-val">' + tm + '</span></div>' +
-      '<div class="data-row"><span class="data-key">GPS</span><span class="data-val" style="color:#10b981">' + lat + ', ' + lng + '</span></div>' +
-      '<a class="map-link" href="' + mapLink + '" target="_blank">🗺 Google Maps-ல் பார்</a>';
+      row('பெயர்', name) + row('NIC No', nicno) + row('Branch', branch) +
+      row('தேதி', dt) + row('நேரம்', tm) + row('GPS', lat + ', ' + lng, '#15803D');
   }, 1000);
+}
+
+function row(k, v, vc) {
+  return '<div class="s-row"><span class="s-key">' + k + '</span>' +
+    '<span class="s-val"' + (vc ? ' style="color:' + vc + '"' : '') + '>' + v + '</span></div>';
 }
 </script>
 </body>
