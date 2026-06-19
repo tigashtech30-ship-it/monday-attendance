@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Monday Morning Meeting — Attendance</title>
+<title>Knowledge Sharing Event  — Attendance</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -134,10 +134,6 @@ input::placeholder { color: #94A3B8; font-weight: 400; font-size: 14px; }
 input.valid   { border-color: #16A34A; background: #F0FDF4; }
 input.invalid { border-color: #DC2626; background: #FEF2F2; }
 
-/* Branch datalist */
-.branch-wrap { position: relative; }
-.branch-wrap input { padding-right: 36px; }
-
 /* Divider */
 .divider { height: 2px; background: #E2E8F0; margin: 20px 0; border-radius: 2px; }
 
@@ -209,18 +205,38 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
 .s-key { color: #64748B; font-weight: 600; }
 .s-val { color: #0F172A; font-weight: 700; text-align: right; max-width: 62%; word-break: break-all; }
 
+/* Action buttons — Close replaces Map */
 .action-btns { display: flex; gap: 10px; margin-top: 16px; }
-.map-link {
-  flex: 1; background: #1E3A8A; color: #fff; text-decoration: none;
-  padding: 11px 16px; border-radius: 8px;
-  font-size: 14px; font-weight: 700; text-align: center;
+
+.close-btn {
+  flex: 1;
+  background: #DC2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
 }
+.close-btn:hover { background: #B91C1C; }
+
 .again-btn {
-  flex: 1; background: #F1F5F9; color: #1E3A8A;
-  border: 2px solid #1E3A8A; border-radius: 8px;
-  padding: 11px 16px; font-size: 14px; font-weight: 700;
-  cursor: pointer; font-family: inherit;
+  flex: 1;
+  background: #F1F5F9;
+  color: #1E3A8A;
+  border: 2px solid #1E3A8A;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
 }
+.again-btn:hover { background: #E2E8F0; }
 
 .date-bar {
   text-align: center; font-size: 13px; font-weight: 600;
@@ -236,7 +252,7 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
     <div class="header-icon">📋</div>
     <div>
       <div class="header-title">அறிவுப்பகிர்வு நிகழ்ச்சி</div>
-      <div class="header-sub">knowledge Sharing — JMC</div>
+      <div class="header-sub">Knowledge Sharing — JMC</div>
     </div>
     <div class="time-badge" id="live-time">--:--</div>
   </div>
@@ -245,7 +261,7 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
   <div class="card">
     <div id="form-section">
 
-      <!-- Saved details banner -->
+      <!-- Saved banner -->
       <div class="saved-banner" id="saved-banner">
         <span>💾 உங்கள் தகவல்கள் நினைவில் உள்ளது!</span>
         <button class="clear-btn" onclick="clearSaved()">அழி</button>
@@ -259,10 +275,12 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
 
       <!-- NIC -->
       <div class="form-group">
-        <label>NIC எண் <span class="label-ta">/ NIC No</span></label>
+        <label>தே.அ.அ.இல எண் <span class="label-ta">/ NIC No</span></label>
         <div class="nic-wrap">
-          <input type="text" id="nicno" placeholder="0123456789XX அல்லது 123456789V"
-            autocomplete="off" oninput="validateNIC(this)" style="padding-right: 44px;">
+          <input type="text" id="nicno"
+            placeholder="0123456789XX அல்லது 123456789V"
+            autocomplete="off" oninput="validateNIC(this)"
+            style="padding-right: 44px;">
           <span class="nic-status" id="nic-status"></span>
         </div>
         <div class="nic-hint" id="nic-hint">புதிய: 12 இலக்கம் (199912345678) | பழைய: 9 இலக்கம் + V (990123456V)</div>
@@ -271,7 +289,7 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
       <!-- Branch -->
       <div class="form-group">
         <label>கிளை <span class="label-ta">/ Branch</span></label>
-        <input type="text" id="branch" placeholder="கிளை பெயர் உள்ளிடுக " autocomplete="off">
+        <input type="text" id="branch" placeholder="கிளை பெயர் உள்ளிடுக" autocomplete="off">
       </div>
 
       <div class="divider"></div>
@@ -305,7 +323,7 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
       <div class="success-sub">Attendance Google Sheets-ல்<br>தானாக பதிவு செய்யப்பட்டது.</div>
       <div class="success-table" id="success-data"></div>
       <div class="action-btns">
-        <a id="map-link" class="map-link" href="#" target="_blank">🗺 Maps-ல் பார்</a>
+        <button class="close-btn" onclick="closePage()">✕ மூடு / Close</button>
         <button class="again-btn" onclick="resetForm()">🔄 மீண்டும்</button>
       </div>
     </div>
@@ -315,9 +333,7 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
 </div>
 
 <script>
-// ── உங்கள் Google Apps Script URL இங்கே ──
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoEQL4afV0zE21EQZS9yjUQnk3og7qVYJ3NT00rS7p4ewTNiB7hQ2T3u_ZNJ1Qbgv3/exec";
-
 const STORAGE_KEY = "jmc_attendance_user";
 let lat = null, lng = null;
 
@@ -334,9 +350,8 @@ tick(); setInterval(tick, 1000);
 // ── NIC Validation ─────────────────────────────────────────────────
 function validateNIC(input) {
   const val    = input.value.trim().toUpperCase();
-  const newNIC = /^\d{12}$/;           // 199832100392
-  const oldNIC = /^\d{9}[VX]$/;       // 983210392V
-
+  const newNIC = /^\d{12}$/;
+  const oldNIC = /^\d{9}[VX]$/;
   const statusEl = document.getElementById('nic-status');
   const hintEl   = document.getElementById('nic-hint');
 
@@ -347,7 +362,6 @@ function validateNIC(input) {
     hintEl.textContent = 'புதிய: 12 இலக்கம் (199912345678) | பழைய: 9 இலக்கம் + V (990123456V)';
     return false;
   }
-
   if (newNIC.test(val) || oldNIC.test(val)) {
     input.className = 'valid';
     input.value = val;
@@ -361,7 +375,7 @@ function validateNIC(input) {
     hintEl.className = 'nic-hint err';
     if (/^\d+$/.test(val)) {
       hintEl.textContent = val.length < 12
-        ? `இன்னும் ${12 - val.length} இலக்கம் தேவை (புதிய format)`
+        ? 'இன்னும் ' + (12 - val.length) + ' இலக்கம் தேவை (புதிய format)'
         : 'தவறான format — 12 இலக்கம் மட்டும்';
     } else if (/^\d{9}[^VX]$/.test(val)) {
       hintEl.textContent = 'கடைசி எழுத்து V அல்லது X ஆக இருக்க வேண்டும்';
@@ -372,20 +386,21 @@ function validateNIC(input) {
   }
 }
 
-// ── Auto-fill from localStorage ────────────────────────────────────
+// ── LocalStorage ───────────────────────────────────────────────────
 function loadSaved() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     const saved = JSON.parse(raw);
     if (saved.name)   document.getElementById('name').value   = saved.name;
-    if (saved.nicno)  { document.getElementById('nicno').value = saved.nicno; validateNIC(document.getElementById('nicno')); }
+    if (saved.nicno)  {
+      document.getElementById('nicno').value = saved.nicno;
+      validateNIC(document.getElementById('nicno'));
+    }
     if (saved.branch) document.getElementById('branch').value = saved.branch;
-
     const banner = document.getElementById('saved-banner');
     banner.classList.add('show');
-    banner.querySelector('span').textContent =
-      '💾 ' + saved.name + ' — தகவல்கள் நினைவில் உள்ளது!';
+    banner.querySelector('span').textContent = '💾 ' + saved.name + ' — தகவல்கள் நினைவில் உள்ளது!';
   } catch(e) {}
 }
 
@@ -393,26 +408,26 @@ function saveToStorage(name, nicno, branch) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, nicno, branch })); } catch(e) {}
 }
 
-//function clearSaved() {
-//try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
-//document.getElementById('name').value   = '';
-//document.getElementById('nicno').value  = '';
-//document.getElementById('branch').value = '';
-//document.getElementById('nicno').className = '';
-//document.getElementById('nic-status').textContent = '';
-//document.getElementById('nic-hint').className = 'nic-hint';
-//document.getElementById('nic-hint').textContent = 'புதிய: 12 இலக்கம் | பழைய: 9 இலக்கம் + V';
-//document.getElementById('saved-banner').classList.remove('show');
-//}
+function clearSaved() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  document.getElementById('name').value   = '';
+  document.getElementById('nicno').value  = '';
+  document.getElementById('branch').value = '';
+  document.getElementById('nicno').className = '';
+  document.getElementById('nic-status').textContent = '';
+  document.getElementById('nic-hint').className = 'nic-hint';
+  document.getElementById('nic-hint').textContent = 'புதிய: 12 இலக்கம் | பழைய: 9 இலக்கம் + V';
+  document.getElementById('saved-banner').classList.remove('show');
+}
 
 // ── Location ───────────────────────────────────────────────────────
 function setLoc(state, msg, coords, hint) {
-  document.getElementById('loc-outer').className = 'loc-outer' + (state ? ' ' + state : '');
+  document.getElementById('loc-outer').className   = 'loc-outer' + (state ? ' ' + state : '');
   document.getElementById('loc-text').textContent  = msg;
   document.getElementById('loc-coords').textContent = coords || '';
   const h = document.getElementById('loc-hint');
-  h.textContent  = hint || '';
-  h.className    = 'loc-hint' + (hint ? ' show' : '');
+  h.textContent = hint || '';
+  h.className   = 'loc-hint' + (hint ? ' show' : '');
   const b = document.getElementById('loc-btn');
   b.disabled    = state === 'loading';
   b.textContent = state === 'loading' ? '⏳ தேடுகிறது...' : '📡 எடு';
@@ -459,7 +474,6 @@ function submitForm() {
   if (!branch) { alert('கிளை பெயர் உள்ளிடவும்!'); return; }
   if (!lat || !lng) { alert('முதலில் Location எடுக்கவும்!'); return; }
 
-  // Save to localStorage for next time
   saveToStorage(name, nicno, branch);
 
   const btn = document.getElementById('submit-btn');
@@ -471,22 +485,22 @@ function submitForm() {
   const tm  = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
   const ml  = 'https://maps.google.com/?q=' + lat + ',' + lng;
 
-  if (SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-    fetch(SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, nicno, branch, date: dt, time: tm, latitude: lat, longitude: lng, mapLink: ml })
-    }).catch(function() {});
-  }
+  fetch(SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, nicno, branch, date: dt, time: tm, latitude: lat, longitude: lng, mapLink: ml })
+  }).catch(function() {});
 
   setTimeout(function() {
-    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('form-section').style.display  = 'none';
     document.getElementById('success-section').style.display = 'block';
-    document.getElementById('map-link').href = ml;
     document.getElementById('success-data').innerHTML =
-      row('பெயர்', name) + row('NIC No', nicno) + row('Branch', branch) +
-      row('தேதி', dt) + row('நேரம்', tm) +
-      row('GPS', lat + ', ' + lng, '#15803D');
+      row('பெயர்',  name)   +
+      row('NIC No', nicno)  +
+      row('Branch', branch) +
+      row('தேதி',   dt)     +
+      row('நேரம்',  tm)     +
+      row('GPS',    lat + ', ' + lng, '#15803D');
   }, 900);
 }
 
@@ -495,15 +509,31 @@ function row(k, v, vc) {
     '<span class="s-val"' + (vc ? ' style="color:' + vc + '"' : '') + '>' + v + '</span></div>';
 }
 
+// ── Close Page ─────────────────────────────────────────────────────
+function closePage() {
+  // Browser tab மூடு
+  window.close();
+  // window.close() சில browsers-ல் வேலை செய்யாது —
+  // அப்போது thank you screen காட்டு
+  setTimeout(function() {
+    document.getElementById('success-section').innerHTML =
+      '<div style="padding:30px 0; text-align:center;">' +
+      '<div style="font-size:56px; margin-bottom:12px;">🙏</div>' +
+      '<div style="font-size:20px; font-weight:700; color:#1E3A8A; margin-bottom:8px;">நன்றி!</div>' +
+      '<div style="font-size:14px; color:#64748B; line-height:1.7;">உங்கள் Attendance பதிவு செய்யப்பட்டது.<br>இந்த Tab-ஐ மூடலாம்.</div>' +
+      '</div>';
+  }, 300);
+}
+
 // ── Reset ──────────────────────────────────────────────────────────
 function resetForm() {
   lat = null; lng = null;
   document.getElementById('success-section').style.display = 'none';
   document.getElementById('form-section').style.display    = 'block';
   document.getElementById('submit-btn').disabled    = false;
-  document.getElementById('submit-btn').textContent = '✓ Attendance பதிவு செய்';
+  document.getElementById('submit-btn').textContent = '✓ வரவினை பதிவு செய்யவும்';
   setLoc('', 'GPS இன்னும் எடுக்கவில்லை', '', '');
-  loadSaved(); // auto-fill again
+  loadSaved();
 }
 
 // ── Init ───────────────────────────────────────────────────────────
