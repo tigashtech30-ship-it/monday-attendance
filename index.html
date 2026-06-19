@@ -3,101 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Monday Knowledge Sharing — Attendance</title>
+<title>Monday Morning Meeting — Attendance</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
-  background: #FFFFFF;
+  background: #F1F5F9;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
 }
+.container { width: 100%; max-width: 480px; }
 
-.container {
-  width: 100%;
-  max-width: 480px;
-}
-
-/* ── Header ── */
+/* Header */
 .header {
   background: #1E3A8A;
   border-radius: 16px 16px 0 0;
-  padding: 20px 24px;
+  padding: 18px 22px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 13px;
 }
 .header-icon {
-  width: 52px; height: 52px;
-  background: #FFFFFF;
+  width: 50px; height: 50px;
+  background: #fff;
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 26px;
-  flex-shrink: 0;
+  font-size: 24px; flex-shrink: 0;
 }
-.header-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #FFFFFF;
-  line-height: 1.2;
-}
-.header-sub {
-  font-size: 13px;
-  color: #BFDBFE;
-  margin-top: 3px;
-}
+.header-title { font-size: 19px; font-weight: 700; color: #fff; line-height: 1.2; }
+.header-sub   { font-size: 12px; color: #BFDBFE; margin-top: 3px; }
 .time-badge {
   margin-left: auto;
   background: rgba(255,255,255,0.15);
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #FFFFFF;
-  white-space: nowrap;
-  flex-shrink: 0;
+  padding: 6px 13px;
+  font-size: 13px; font-weight: 700; color: #fff;
+  white-space: nowrap; flex-shrink: 0;
 }
 
-/* ── Card Body ── */
+/* Card */
 .card {
-  background: #FFFFFF;
+  background: #fff;
   border: 2px solid #1E3A8A;
   border-top: none;
   border-radius: 0 0 16px 16px;
-  padding: 24px;
+  padding: 22px;
 }
 
-/* ── Form Groups ── */
-.form-group { margin-bottom: 20px; }
+/* Saved banner */
+.saved-banner {
+  display: none;
+  background: #EFF6FF;
+  border: 1.5px solid #BFDBFE;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  color: #1E3A8A;
+  font-weight: 600;
+  align-items: center;
+  gap: 8px;
+}
+.saved-banner.show { display: flex; }
+.clear-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid #93C5FD;
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: 12px;
+  color: #1D4ED8;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
 
+/* Form */
+.form-group { margin-bottom: 18px; }
 label {
   display: block;
   font-size: 15px;
   font-weight: 700;
   color: #1E293B;
-  margin-bottom: 8px;
-  letter-spacing: 0.01em;
+  margin-bottom: 7px;
 }
-
-.label-ta {
-  font-size: 13px;
-  font-weight: 600;
-  color: #475569;
-  margin-left: 6px;
-}
+.label-ta { font-size: 12px; font-weight: 600; color: #64748B; margin-left: 5px; }
 
 input, select {
   width: 100%;
   background: #F8FAFC;
   border: 2px solid #CBD5E1;
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 13px 15px;
   font-size: 17px;
   font-weight: 600;
   color: #0F172A;
@@ -108,168 +110,121 @@ input, select {
 }
 input:focus, select:focus {
   border-color: #1E3A8A;
-  background: #FFFFFF;
+  background: #fff;
   box-shadow: 0 0 0 3px rgba(30,58,138,0.10);
 }
-input::placeholder { color: #94A3B8; font-weight: 400; }
+input::placeholder { color: #94A3B8; font-weight: 400; font-size: 14px; }
 
-/* ── Divider ── */
-.divider {
-  height: 2px;
-  background: #E2E8F0;
-  margin: 22px 0;
-  border-radius: 2px;
+/* NIC validation */
+.nic-wrap { position: relative; }
+.nic-status {
+  position: absolute;
+  right: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
 }
+.nic-hint {
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 5px;
+  font-weight: 500;
+}
+.nic-hint.ok  { color: #15803D; }
+.nic-hint.err { color: #DC2626; }
+input.valid   { border-color: #16A34A; background: #F0FDF4; }
+input.invalid { border-color: #DC2626; background: #FEF2F2; }
 
-/* ── Location Box ── */
+/* Branch datalist */
+.branch-wrap { position: relative; }
+.branch-wrap input { padding-right: 36px; }
+
+/* Divider */
+.divider { height: 2px; background: #E2E8F0; margin: 20px 0; border-radius: 2px; }
+
+/* Location */
 .loc-outer {
   border: 2px solid #CBD5E1;
   border-radius: 10px;
   overflow: hidden;
   transition: border-color 0.3s;
 }
-.loc-outer.ok  { border-color: #16A34A; }
-.loc-outer.err { border-color: #DC2626; }
+.loc-outer.ok      { border-color: #16A34A; }
+.loc-outer.err     { border-color: #DC2626; }
 .loc-outer.loading { border-color: #1E3A8A; }
-
 .loc-inner {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 14px;
-  background: #F8FAFC;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 13px; background: #F8FAFC;
 }
-.loc-outer.ok   .loc-inner { background: #F0FDF4; }
-.loc-outer.err  .loc-inner { background: #FEF2F2; }
+.loc-outer.ok      .loc-inner { background: #F0FDF4; }
+.loc-outer.err     .loc-inner { background: #FEF2F2; }
 .loc-outer.loading .loc-inner { background: #EFF6FF; }
-
 .loc-pin { font-size: 22px; flex-shrink: 0; }
-
-.loc-text {
-  flex: 1;
-  font-size: 15px;
-  font-weight: 600;
-  color: #475569;
-  line-height: 1.3;
-}
-.loc-outer.ok   .loc-text { color: #15803D; }
-.loc-outer.err  .loc-text { color: #B91C1C; }
+.loc-text { flex: 1; font-size: 15px; font-weight: 600; color: #475569; line-height: 1.3; }
+.loc-outer.ok      .loc-text { color: #15803D; }
+.loc-outer.err     .loc-text { color: #B91C1C; }
 .loc-outer.loading .loc-text { color: #1E3A8A; }
-
-.loc-coords {
-  font-family: monospace;
-  font-size: 12px;
-  color: #64748B;
-  margin-top: 3px;
-  font-weight: 400;
-}
-
+.loc-coords { font-family: monospace; font-size: 11px; color: #64748B; margin-top: 3px; }
 .loc-btn {
-  background: #1E3A8A;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: inherit;
-  transition: background 0.2s;
-  flex-shrink: 0;
+  background: #1E3A8A; color: #fff; border: none;
+  border-radius: 8px; padding: 10px 16px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  white-space: nowrap; font-family: inherit;
+  transition: background 0.2s; flex-shrink: 0;
 }
-.loc-btn:hover  { background: #1E40AF; }
+.loc-btn:hover    { background: #1E40AF; }
 .loc-btn:disabled { background: #94A3B8; cursor: not-allowed; }
-
 .loc-hint {
-  background: #FEF3C7;
-  border-top: 1px solid #FDE68A;
-  padding: 9px 14px;
-  font-size: 13px;
-  color: #92400E;
-  font-weight: 500;
-  display: none;
-  line-height: 1.5;
+  background: #FEF3C7; border-top: 1px solid #FDE68A;
+  padding: 8px 13px; font-size: 13px; color: #92400E;
+  font-weight: 500; display: none; line-height: 1.5;
 }
 .loc-hint.show { display: block; }
 
-/* ── Submit Button ── */
+/* Submit */
 .submit-btn {
-  width: 100%;
-  background: #1E3A8A;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 12px;
-  padding: 18px;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-  letter-spacing: 0.01em;
-  transition: background 0.2s, transform 0.1s;
-  margin-top: 4px;
+  width: 100%; background: #1E3A8A; color: #fff; border: none;
+  border-radius: 12px; padding: 17px;
+  font-size: 20px; font-weight: 700; cursor: pointer;
+  font-family: inherit; letter-spacing: 0.01em;
+  transition: background 0.2s, transform 0.1s; margin-top: 4px;
 }
-.submit-btn:hover  { background: #1E40AF; }
-.submit-btn:active { transform: scale(0.98); }
+.submit-btn:hover    { background: #1E40AF; }
+.submit-btn:active   { transform: scale(0.98); }
 .submit-btn:disabled { background: #94A3B8; cursor: not-allowed; }
 
-/* ── Success ── */
-.success {
-  display: none;
-  text-align: center;
-  padding: 8px 0 16px;
-}
-.success-icon { font-size: 64px; margin-bottom: 10px; }
-.success-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #15803D;
-  margin-bottom: 6px;
-}
-.success-sub {
-  font-size: 15px;
-  color: #475569;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
+/* Success */
+.success { display: none; text-align: center; padding: 8px 0 12px; }
+.success-icon  { font-size: 60px; margin-bottom: 10px; }
+.success-title { font-size: 22px; font-weight: 700; color: #15803D; margin-bottom: 6px; }
+.success-sub   { font-size: 14px; color: #475569; margin-bottom: 18px; line-height: 1.5; }
 .success-table {
-  background: #F8FAFC;
-  border: 2px solid #E2E8F0;
-  border-radius: 10px;
-  overflow: hidden;
-  text-align: left;
+  background: #F8FAFC; border: 2px solid #E2E8F0;
+  border-radius: 10px; overflow: hidden; text-align: left;
 }
 .s-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 11px 16px;
-  border-bottom: 1px solid #E2E8F0;
-  font-size: 15px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 11px 15px; border-bottom: 1px solid #E2E8F0; font-size: 14px;
 }
 .s-row:last-child { border-bottom: none; }
 .s-key { color: #64748B; font-weight: 600; }
-.s-val { color: #0F172A; font-weight: 700; text-align: right; max-width: 60%; }
+.s-val { color: #0F172A; font-weight: 700; text-align: right; max-width: 62%; word-break: break-all; }
+
+.action-btns { display: flex; gap: 10px; margin-top: 16px; }
 .map-link {
-  display: inline-block;
-  margin-top: 14px;
-  background: #1E3A8A;
-  color: #FFFFFF;
-  text-decoration: none;
-  padding: 11px 24px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 700;
+  flex: 1; background: #1E3A8A; color: #fff; text-decoration: none;
+  padding: 11px 16px; border-radius: 8px;
+  font-size: 14px; font-weight: 700; text-align: center;
+}
+.again-btn {
+  flex: 1; background: #F1F5F9; color: #1E3A8A;
+  border: 2px solid #1E3A8A; border-radius: 8px;
+  padding: 11px 16px; font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
 }
 
-/* ── Date bar ── */
 .date-bar {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: #64748B;
-  margin-top: 14px;
-  letter-spacing: 0.02em;
+  text-align: center; font-size: 13px; font-weight: 600;
+  color: #64748B; margin-top: 12px; letter-spacing: 0.02em;
 }
 </style>
 </head>
@@ -280,8 +235,8 @@ input::placeholder { color: #94A3B8; font-weight: 400; }
   <div class="header">
     <div class="header-icon">📋</div>
     <div>
-      <div class="header-title">காலை கூட்டம்</div>
-      <div class="header-sub">Monday Knowledge Sharing </div>
+      <div class="header-title">அறிவுப்பகிர்வு நிகழ்ச்சி</div>
+      <div class="header-sub">knowledge Sharing — JMC</div>
     </div>
     <div class="time-badge" id="live-time">--:--</div>
   </div>
@@ -290,32 +245,38 @@ input::placeholder { color: #94A3B8; font-weight: 400; }
   <div class="card">
     <div id="form-section">
 
+      <!-- Saved details banner -->
+      <div class="saved-banner" id="saved-banner">
+        <span>💾 உங்கள் தகவல்கள் நினைவில் உள்ளது!</span>
+        <button class="clear-btn" onclick="clearSaved()">அழி</button>
+      </div>
+
+      <!-- Name -->
       <div class="form-group">
         <label>பெயர் <span class="label-ta">/ Name</span></label>
-        <input type="text" id="name" placeholder="உங்கள் பெயர் உள்ளிடுக" autocomplete="name">
+        <input type="text" id="name" placeholder="உங்கள் பெயர் உள்ளிடுக" autocomplete="off">
       </div>
 
+      <!-- NIC -->
       <div class="form-group">
         <label>NIC எண் <span class="label-ta">/ NIC No</span></label>
-        <input type="text" id="nicno" placeholder="200012345678" autocomplete="off" inputmode="numeric">
+        <div class="nic-wrap">
+          <input type="text" id="nicno" placeholder="0123456789XX அல்லது 123456789V"
+            autocomplete="off" oninput="validateNIC(this)" style="padding-right: 44px;">
+          <span class="nic-status" id="nic-status"></span>
+        </div>
+        <div class="nic-hint" id="nic-hint">புதிய: 12 இலக்கம் (199912345678) | பழைய: 9 இலக்கம் + V (990123456V)</div>
       </div>
 
+      <!-- Branch -->
       <div class="form-group">
         <label>கிளை <span class="label-ta">/ Branch</span></label>
-        <select id="branch">
-          <option value="">-- தேர்வு செய்க / Select Branch --</option>
-          <option>Commissioner Branch</option>
-          <option>Administrative Branch</option>
-          <option>Finance Branch</option>
-          <option>Engineering Branch</option>
-          <option>Health Branch</option>
-          <option>Revenue Branch</option>
-          <option>Planning Branch</option>
-        </select>
+        <input type="text" id="branch" placeholder="கிளை பெயர் உள்ளிடுக " autocomplete="off">
       </div>
 
       <div class="divider"></div>
 
+      <!-- Location -->
       <div class="form-group">
         <label>இருப்பிடம் <span class="label-ta">/ Location</span></label>
         <div class="loc-outer" id="loc-outer">
@@ -332,7 +293,7 @@ input::placeholder { color: #94A3B8; font-weight: 400; }
       </div>
 
       <button class="submit-btn" id="submit-btn" onclick="submitForm()">
-        ✓ Attendance பதிவு செய்
+        ✓ வரவினை பதிவு செய்யவும்
       </button>
 
     </div><!-- /form-section -->
@@ -341,46 +302,119 @@ input::placeholder { color: #94A3B8; font-weight: 400; }
     <div class="success" id="success-section">
       <div class="success-icon">✅</div>
       <div class="success-title">வெற்றிகரமாக பதிவாகியது!</div>
-      <div class="success-sub">உங்கள் Attendance Google Sheets-ல்<br>தானாக பதிவு செய்யப்பட்டது.</div>
+      <div class="success-sub">Attendance Google Sheets-ல்<br>தானாக பதிவு செய்யப்பட்டது.</div>
       <div class="success-table" id="success-data"></div>
-      <a id="map-link" class="map-link" href="#" target="_blank">🗺 Google Maps-ல் பார்</a>
+      <div class="action-btns">
+        <a id="map-link" class="map-link" href="#" target="_blank">🗺 Maps-ல் பார்</a>
+        <button class="again-btn" onclick="resetForm()">🔄 மீண்டும்</button>
+      </div>
     </div>
 
   </div><!-- /card -->
-
   <div class="date-bar" id="date-bar"></div>
-
-</div><!-- /container -->
+</div>
 
 <script>
-// ── உங்கள் Google Apps Script URL இங்கே ஒட்டவும் ──
+// ── உங்கள் Google Apps Script URL இங்கே ──
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoEQL4afV0zE21EQZS9yjUQnk3og7qVYJ3NT00rS7p4ewTNiB7hQ2T3u_ZNJ1Qbgv3/exec";
 
+const STORAGE_KEY = "jmc_attendance_user";
 let lat = null, lng = null;
 
-// Clock
+// ── Clock ──────────────────────────────────────────────────────────
 function tick() {
   const n = new Date();
-  const t = n.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-  document.getElementById('live-time').textContent = t;
+  document.getElementById('live-time').textContent =
+    n.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
   document.getElementById('date-bar').textContent =
     n.toLocaleDateString('ta-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 }
 tick(); setInterval(tick, 1000);
 
-// Location
+// ── NIC Validation ─────────────────────────────────────────────────
+function validateNIC(input) {
+  const val    = input.value.trim().toUpperCase();
+  const newNIC = /^\d{12}$/;           // 199832100392
+  const oldNIC = /^\d{9}[VX]$/;       // 983210392V
+
+  const statusEl = document.getElementById('nic-status');
+  const hintEl   = document.getElementById('nic-hint');
+
+  if (val === '') {
+    input.className = '';
+    statusEl.textContent = '';
+    hintEl.className = 'nic-hint';
+    hintEl.textContent = 'புதிய: 12 இலக்கம் (199912345678) | பழைய: 9 இலக்கம் + V (990123456V)';
+    return false;
+  }
+
+  if (newNIC.test(val) || oldNIC.test(val)) {
+    input.className = 'valid';
+    input.value = val;
+    statusEl.textContent = '✅';
+    hintEl.className = 'nic-hint ok';
+    hintEl.textContent = 'NIC எண் சரியாக உள்ளது ✓';
+    return true;
+  } else {
+    input.className = 'invalid';
+    statusEl.textContent = '❌';
+    hintEl.className = 'nic-hint err';
+    if (/^\d+$/.test(val)) {
+      hintEl.textContent = val.length < 12
+        ? `இன்னும் ${12 - val.length} இலக்கம் தேவை (புதிய format)`
+        : 'தவறான format — 12 இலக்கம் மட்டும்';
+    } else if (/^\d{9}[^VX]$/.test(val)) {
+      hintEl.textContent = 'கடைசி எழுத்து V அல்லது X ஆக இருக்க வேண்டும்';
+    } else {
+      hintEl.textContent = 'தவறான NIC format — மீண்டும் சரிபார்க்கவும்';
+    }
+    return false;
+  }
+}
+
+// ── Auto-fill from localStorage ────────────────────────────────────
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (saved.name)   document.getElementById('name').value   = saved.name;
+    if (saved.nicno)  { document.getElementById('nicno').value = saved.nicno; validateNIC(document.getElementById('nicno')); }
+    if (saved.branch) document.getElementById('branch').value = saved.branch;
+
+    const banner = document.getElementById('saved-banner');
+    banner.classList.add('show');
+    banner.querySelector('span').textContent =
+      '💾 ' + saved.name + ' — தகவல்கள் நினைவில் உள்ளது!';
+  } catch(e) {}
+}
+
+function saveToStorage(name, nicno, branch) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, nicno, branch })); } catch(e) {}
+}
+
+//function clearSaved() {
+//try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+//document.getElementById('name').value   = '';
+//document.getElementById('nicno').value  = '';
+//document.getElementById('branch').value = '';
+//document.getElementById('nicno').className = '';
+//document.getElementById('nic-status').textContent = '';
+//document.getElementById('nic-hint').className = 'nic-hint';
+//document.getElementById('nic-hint').textContent = 'புதிய: 12 இலக்கம் | பழைய: 9 இலக்கம் + V';
+//document.getElementById('saved-banner').classList.remove('show');
+//}
+
+// ── Location ───────────────────────────────────────────────────────
 function setLoc(state, msg, coords, hint) {
-  const o = document.getElementById('loc-outer');
-  const t = document.getElementById('loc-text');
-  const c = document.getElementById('loc-coords');
+  document.getElementById('loc-outer').className = 'loc-outer' + (state ? ' ' + state : '');
+  document.getElementById('loc-text').textContent  = msg;
+  document.getElementById('loc-coords').textContent = coords || '';
   const h = document.getElementById('loc-hint');
+  h.textContent  = hint || '';
+  h.className    = 'loc-hint' + (hint ? ' show' : '');
   const b = document.getElementById('loc-btn');
-  o.className = 'loc-outer' + (state ? ' ' + state : '');
-  t.textContent = msg;
-  c.textContent = coords || '';
-  h.textContent = hint || '';
-  h.className = 'loc-hint' + (hint ? ' show' : '');
-  b.disabled = state === 'loading';
+  b.disabled    = state === 'loading';
   b.textContent = state === 'loading' ? '⏳ தேடுகிறது...' : '📡 எடு';
 }
 
@@ -397,7 +431,11 @@ function getLocation() {
       setLoc('ok', 'இருப்பிடம் கண்டறியப்பட்டது ✓', lat + ',  ' + lng, '');
     },
     function(e) {
-      const m = { 1: 'Location அனுமதி மறுக்கப்பட்டது', 2: 'GPS Signal கிடைக்கவில்லை', 3: 'நேரம் முடிந்தது — மீண்டும் முயற்சி செய்' };
+      const m = {
+        1: 'Location அனுமதி மறுக்கப்பட்டது',
+        2: 'GPS Signal கிடைக்கவில்லை',
+        3: 'நேரம் முடிந்தது — மீண்டும் முயற்சி செய்'
+      };
       setLoc('err', m[e.code] || 'பிழை ஏற்பட்டது', '',
         'Settings → Privacy → Location → Browser → Allow செய்யவும்.');
       lat = null; lng = null;
@@ -406,16 +444,26 @@ function getLocation() {
   );
 }
 
-// Submit
+// ── Submit ─────────────────────────────────────────────────────────
 function submitForm() {
   const name   = document.getElementById('name').value.trim();
-  const nicno  = document.getElementById('nicno').value.trim();
-  const branch = document.getElementById('branch').value;
-  if (!name || !nicno || !branch) { alert('அனைத்து தகவல்களையும் உள்ளிடவும்!'); return; }
+  const nicno  = document.getElementById('nicno').value.trim().toUpperCase();
+  const branch = document.getElementById('branch').value.trim();
+
+  if (!name)   { alert('பெயர் உள்ளிடவும்!'); return; }
+  if (!nicno)  { alert('NIC எண் உள்ளிடவும்!'); return; }
+  if (!validateNIC(document.getElementById('nicno'))) {
+    alert('NIC எண் சரியான format-ல் இல்லை!\nபுதிய: 199912345678\nபழைய: 990123456V');
+    return;
+  }
+  if (!branch) { alert('கிளை பெயர் உள்ளிடவும்!'); return; }
   if (!lat || !lng) { alert('முதலில் Location எடுக்கவும்!'); return; }
 
+  // Save to localStorage for next time
+  saveToStorage(name, nicno, branch);
+
   const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = '⏳ பதிவு செய்கிறது...';
 
   const now = new Date();
@@ -437,14 +485,29 @@ function submitForm() {
     document.getElementById('map-link').href = ml;
     document.getElementById('success-data').innerHTML =
       row('பெயர்', name) + row('NIC No', nicno) + row('Branch', branch) +
-      row('தேதி', dt) + row('நேரம்', tm) + row('GPS', lat + ', ' + lng, '#15803D');
-  }, 1000);
+      row('தேதி', dt) + row('நேரம்', tm) +
+      row('GPS', lat + ', ' + lng, '#15803D');
+  }, 900);
 }
 
 function row(k, v, vc) {
   return '<div class="s-row"><span class="s-key">' + k + '</span>' +
     '<span class="s-val"' + (vc ? ' style="color:' + vc + '"' : '') + '>' + v + '</span></div>';
 }
+
+// ── Reset ──────────────────────────────────────────────────────────
+function resetForm() {
+  lat = null; lng = null;
+  document.getElementById('success-section').style.display = 'none';
+  document.getElementById('form-section').style.display    = 'block';
+  document.getElementById('submit-btn').disabled    = false;
+  document.getElementById('submit-btn').textContent = '✓ Attendance பதிவு செய்';
+  setLoc('', 'GPS இன்னும் எடுக்கவில்லை', '', '');
+  loadSaved(); // auto-fill again
+}
+
+// ── Init ───────────────────────────────────────────────────────────
+loadSaved();
 </script>
 </body>
 </html>
