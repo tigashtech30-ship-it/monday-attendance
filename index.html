@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Knowledge Sharing Event  — Attendance</title>
+<title>Monday Morning Meeting — Attendance</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -242,10 +242,60 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
   text-align: center; font-size: 13px; font-weight: 600;
   color: #64748B; margin-top: 12px; letter-spacing: 0.02em;
 }
+
+/* Blocked screen (time over) */
+.blocked-screen {
+  display: none;
+  text-align: center;
+  padding: 20px 0;
+}
+.blocked-icon { font-size: 60px; margin-bottom: 14px; }
+.blocked-title { font-size: 21px; font-weight: 700; color: #DC2626; margin-bottom: 8px; }
+.blocked-sub { font-size: 14px; color: #64748B; line-height: 1.7; }
+.blocked-time-box {
+  background: #FEF2F2; border: 2px solid #FECACA; border-radius: 10px;
+  padding: 12px 16px; margin-top: 16px; font-size: 14px; color: #B91C1C; font-weight: 600;
+}
+
+/* Geofence error banner */
+.geofence-banner {
+  display: none;
+  background: #FEF2F2;
+  border: 2px solid #FCA5A5;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: #B91C1C;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.geofence-banner.show { display: block; }
+.geofence-dist { font-family: monospace; font-weight: 700; color: #991B1B; }
 </style>
 </head>
 <body>
 <div class="container">
+
+  <!-- Time-Blocked Screen (shown instead of everything if past cutoff) -->
+  <div class="blocked-screen" id="blocked-screen">
+    <div class="header" style="border-radius:16px 16px 0 0;">
+      <div class="header-icon">⏰</div>
+      <div>
+        <div class="header-title">அறிவுப்பகிர்வு நிகழ்ச்சி</div>
+        <div class="header-sub">Knowledge Sharing — JMC</div>
+      </div>
+    </div>
+    <div class="card" style="border-radius:0 0 16px 16px;">
+      <div class="blocked-icon">⏰</div>
+      <div class="blocked-title">பதிவு நேரம் முடிந்துவிட்டது!</div>
+      <div class="blocked-sub">காலை 8.30 மணிக்கு பின் Attendance பதிவு செய்ய முடியாது.<br>Attendance registration closes at 8.30 AM.</div>
+      <div class="blocked-time-box" id="blocked-current-time"></div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="main-app">
 
   <!-- Header -->
   <div class="header">
@@ -256,10 +306,16 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
     </div>
     <div class="time-badge" id="live-time">--:--</div>
   </div>
+  <div id="test-mode-strip" style="display:none; background:#FBBF24; color:#78350F; text-align:center; font-size:13px; font-weight:700; padding:6px; letter-spacing:0.02em;">
+    🧪 TEST MODE — Time Lock & Geofence Off
+  </div>
 
   <!-- Card -->
   <div class="card">
     <div id="form-section">
+
+      <!-- Geofence error banner -->
+      <div class="geofence-banner" id="geofence-banner"></div>
 
       <!-- Saved banner -->
       <div class="saved-banner" id="saved-banner">
@@ -275,7 +331,7 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
 
       <!-- NIC -->
       <div class="form-group">
-        <label>தே.அ.அ.இல எண் <span class="label-ta">/ NIC No</span></label>
+        <label>NIC எண் <span class="label-ta">/ NIC No</span></label>
         <div class="nic-wrap">
           <input type="text" id="nicno"
             placeholder="0123456789XX அல்லது 123456789V"
@@ -330,12 +386,61 @@ input.invalid { border-color: #DC2626; background: #FEF2F2; }
 
   </div><!-- /card -->
   <div class="date-bar" id="date-bar"></div>
+
+  </div><!-- /main-app -->
+
 </div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoEQL4afV0zE21EQZS9yjUQnk3og7qVYJ3NT00rS7p4ewTNiB7hQ2T3u_ZNJ1Qbgv3/exec";
 const STORAGE_KEY = "jmc_attendance_user";
 let lat = null, lng = null;
+
+// ════════════════════════════════════════════════════════════════
+// 🧪 TEST MODE — Test செய்யும்போது இதை true ஆக வையுங்கள்.
+//    Live-ல் பயன்படுத்தும்போது false ஆக மாற்றுங்கள்!
+// ════════════════════════════════════════════════════════════════
+const TEST_MODE = false;
+
+// ════════════════════════════════════════════════════════════════
+// ⏰ TIME LOCK SETTINGS — காலை 8.30 மணிக்கு பின் Block ஆகும்
+// ════════════════════════════════════════════════════════════════
+const CUTOFF_HOUR   = 8;
+const CUTOFF_MINUTE = 30;
+
+// ════════════════════════════════════════════════════════════════
+// 📍 GEOFENCE SETTINGS — அலுவலக Boundary
+// ════════════════════════════════════════════════════════════════
+const OFFICE_LAT    = 9.674086;
+const OFFICE_LNG    = 80.033520;
+const MAX_RADIUS_M  = 50;   // மீட்டர்
+
+function isPastCutoff() {
+  if (TEST_MODE) return false;   // Test Mode-ல் Time Lock முற்றிலும் Off
+  const n = new Date();
+  const cutoff = new Date(n);
+  cutoff.setHours(CUTOFF_HOUR, CUTOFF_MINUTE, 0, 0);
+  return n > cutoff;
+}
+
+function checkTimeLock() {
+  if (isPastCutoff()) {
+    document.getElementById('blocked-screen').style.display = 'block';
+    document.getElementById('main-app').style.display = 'none';
+    return true;
+  }
+  return false;
+}
+
+// Haversine distance (meters)
+function distanceMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const p1 = lat1 * Math.PI / 180, p2 = lat2 * Math.PI / 180;
+  const dp = (lat2 - lat1) * Math.PI / 180;
+  const dl = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dp/2)**2 + Math.cos(p1) * Math.cos(p2) * Math.sin(dl/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
 
 // ── Clock ──────────────────────────────────────────────────────────
 function tick() {
@@ -344,6 +449,19 @@ function tick() {
     n.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
   document.getElementById('date-bar').textContent =
     n.toLocaleDateString('ta-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const bt = document.getElementById('blocked-current-time');
+  if (bt) {
+    bt.textContent = 'தற்போதைய நேரம் / Current Time: ' +
+      n.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+  }
+
+  // Live check every tick — if cutoff passes WHILE user has the page open
+  if (!document.getElementById('blocked-screen').dataset.locked) {
+    if (checkTimeLock()) {
+      document.getElementById('blocked-screen').dataset.locked = '1';
+    }
+  }
 }
 tick(); setInterval(tick, 1000);
 
@@ -438,12 +556,42 @@ function getLocation() {
     setLoc('err', 'GPS ஆதரிக்கப்படவில்லை', '', 'Chrome Browser பயன்படுத்துங்கள்.');
     return;
   }
+  document.getElementById('geofence-banner').classList.remove('show');
   setLoc('loading', 'GPS தேடுகிறது...', '', '');
   navigator.geolocation.getCurrentPosition(
     function(p) {
-      lat = p.coords.latitude.toFixed(6);
-      lng = p.coords.longitude.toFixed(6);
-      setLoc('ok', 'இருப்பிடம் கண்டறியப்பட்டது ✓', lat + ',  ' + lng, '');
+      const fLat = p.coords.latitude.toFixed(6);
+      const fLng = p.coords.longitude.toFixed(6);
+      const dist = distanceMeters(OFFICE_LAT, OFFICE_LNG, parseFloat(fLat), parseFloat(fLng));
+
+      if (dist > MAX_RADIUS_M && !TEST_MODE) {
+        // Outside boundary — reject (Live mode only)
+        lat = null; lng = null;
+        setLoc('err', 'அலுவலக வளாகத்திற்கு வெளியே உள்ளீர்கள்', '', '');
+        const gb = document.getElementById('geofence-banner');
+        gb.classList.add('show');
+        gb.innerHTML = '📍 நீங்கள் அலுவலகத்திலிருந்து <span class="geofence-dist">' +
+          Math.round(dist) + ' மீட்டர்</span> தொலைவில் உள்ளீர்கள்.<br>' +
+          'அனுமதிக்கப்பட்ட தூரம்: ' + MAX_RADIUS_M + 'மீ. அலுவலக வளாகத்திற்குள் வந்து மீண்டும் முயற்சி செய்யவும்.';
+        return;
+      }
+
+      // Inside boundary — accept (or Test Mode bypass)
+      lat = fLat; lng = fLng;
+      document.getElementById('geofence-banner').classList.remove('show');
+      if (TEST_MODE && dist > MAX_RADIUS_M) {
+        const gb = document.getElementById('geofence-banner');
+        gb.classList.add('show');
+        gb.style.background = '#FEF3C7';
+        gb.style.borderColor = '#FDE68A';
+        gb.style.color = '#92400E';
+        gb.innerHTML = '🧪 <strong>Test Mode:</strong> நீங்கள் அலுவலகத்திலிருந்து ' +
+          Math.round(dist) + 'மீ தொலைவில் உள்ளீர்கள் (Limit: ' + MAX_RADIUS_M + 'மீ) — ' +
+          'Test Mode-ல் இருப்பதால் Submit அனுமதிக்கப்படுகிறது.';
+        setLoc('ok', 'இருப்பிடம் கண்டறியப்பட்டது ✓ (Boundary-க்கு வெளியே — ' + Math.round(dist) + 'மீ)', lat + ',  ' + lng, '');
+      } else {
+        setLoc('ok', 'இருப்பிடம் கண்டறியப்பட்டது ✓ (' + Math.round(dist) + 'மீ)', lat + ',  ' + lng, '');
+      }
     },
     function(e) {
       const m = {
@@ -461,6 +609,12 @@ function getLocation() {
 
 // ── Submit ─────────────────────────────────────────────────────────
 function submitForm() {
+  // Final safety check — time
+  if (isPastCutoff()) {
+    checkTimeLock();
+    return;
+  }
+
   const name   = document.getElementById('name').value.trim();
   const nicno  = document.getElementById('nicno').value.trim().toUpperCase();
   const branch = document.getElementById('branch').value.trim();
@@ -473,6 +627,13 @@ function submitForm() {
   }
   if (!branch) { alert('கிளை பெயர் உள்ளிடவும்!'); return; }
   if (!lat || !lng) { alert('முதலில் Location எடுக்கவும்!'); return; }
+
+  // Final safety check — geofence (skipped in Test Mode)
+  const finalDist = distanceMeters(OFFICE_LAT, OFFICE_LNG, parseFloat(lat), parseFloat(lng));
+  if (finalDist > MAX_RADIUS_M && !TEST_MODE) {
+    alert('நீங்கள் அலுவலக வளாகத்திற்கு வெளியே உள்ளீர்கள்!\n(' + Math.round(finalDist) + 'மீ தொலைவில்)\nமீண்டும் Location எடுக்கவும்.');
+    return;
+  }
 
   saveToStorage(name, nicno, branch);
 
@@ -537,7 +698,14 @@ function resetForm() {
 }
 
 // ── Init ───────────────────────────────────────────────────────────
-loadSaved();
+if (TEST_MODE) {
+  const strip = document.getElementById('test-mode-strip');
+  if (strip) strip.style.display = 'block';
+}
+if (!checkTimeLock()) {
+  loadSaved();
+}
+
 </script>
 </body>
 </html>
